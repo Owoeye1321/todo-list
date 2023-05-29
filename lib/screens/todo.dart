@@ -15,6 +15,19 @@ class Todo extends StatefulWidget {
 class _TodoState extends State<Todo> {
   final todosList = ToDoModel.todoList();
 
+  _handleTodoChange(ToDoModel todo) {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
+  }
+
+  _handleDelete(String id) {
+    setState(() {
+      todosList.removeWhere((item) => item.id == id);
+    });
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +53,11 @@ class _TodoState extends State<Todo> {
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
                       ),
-                      for (ToDoModel todo in todosList)
+                      for (ToDoModel todoo in todosList)
                         TodoItem(
-                          todo: todo,
+                          todo: todoo,
+                          onTodoHandle: _handleTodoChange,
+                          onTodoDelete: _handleDelete,
                         ),
                     ],
                   ),
@@ -77,15 +92,19 @@ class _TodoState extends State<Todo> {
                 ),
               ),
               Container(
-                width: 90,
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                margin: EdgeInsets.only(bottom: 20, right: 20, left: 20),
+                margin: EdgeInsets.only(bottom: 20, right: 20),
                 decoration: BoxDecoration(
                     color: tdBlue, borderRadius: BorderRadius.circular(20)),
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Icon(Icons.add),
+                  child: Text(
+                    "+",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: tdBlue,
+                      minimumSize: Size(50, 45),
+                      elevation: 10),
                 ),
               ),
             ]),

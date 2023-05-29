@@ -4,9 +4,13 @@ import 'package:todo_list/model/todo_model.dart';
 
 class TodoItem extends StatelessWidget {
   final ToDoModel todo;
+  final onTodoHandle;
+  final onTodoDelete;
   const TodoItem({
     super.key,
     required this.todo,
+    this.onTodoHandle,
+    this.onTodoDelete,
   });
 
   @override
@@ -14,7 +18,9 @@ class TodoItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          onTodoHandle(todo);
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -46,7 +52,9 @@ class TodoItem extends StatelessWidget {
             icon: Icon(
               Icons.delete,
             ),
-            onPressed: () {},
+            onPressed: () {
+              onTodoDelete(todo.id);
+            },
           ),
         ),
       ),
