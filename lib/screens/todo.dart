@@ -12,6 +12,9 @@ class Todo extends StatefulWidget {
   State<Todo> createState() => _TodoState();
 }
 
+String newTodo = "";
+final todoController = TextEditingController();
+
 class _TodoState extends State<Todo> {
   final todosList = ToDoModel.todoList();
 
@@ -26,6 +29,15 @@ class _TodoState extends State<Todo> {
       todosList.removeWhere((item) => item.id == id);
     });
     ;
+  }
+
+  _addTodoItem(String todo) {
+    setState(() {
+      todosList.add(ToDoModel(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          todoText: todo));
+      todoController.clear();
+    });
   }
 
   @override
@@ -84,6 +96,7 @@ class _TodoState extends State<Todo> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextField(
+                    controller: todoController,
                     decoration: InputDecoration(
                       hintText: "Type todo here",
                       border: InputBorder.none,
@@ -96,7 +109,9 @@ class _TodoState extends State<Todo> {
                 decoration: BoxDecoration(
                     color: tdBlue, borderRadius: BorderRadius.circular(20)),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _addTodoItem(todoController.text);
+                  },
                   child: Text(
                     "+",
                     style: TextStyle(fontSize: 30),
