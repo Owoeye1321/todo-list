@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 
 import "../constants/colors.dart";
+import "../model/todo_model.dart";
 
-Widget SearchBar() {
+Widget SearchBar(_runFilter) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 10),
     decoration: BoxDecoration(
@@ -10,6 +11,7 @@ Widget SearchBar() {
       borderRadius: BorderRadius.circular(20),
     ),
     child: TextField(
+      onChanged: (value) => _runFilter(value),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 20),
         prefixIcon: Icon(

@@ -14,30 +14,54 @@ class Todo extends StatefulWidget {
 
 String newTodo = "";
 final todoController = TextEditingController();
+final filterController = TextEditingController();
 
 class _TodoState extends State<Todo> {
   final todosList = ToDoModel.todoList();
+  List<ToDoModel> foundTodo = [];
 
-  _handleTodoChange(ToDoModel todo) {
+  void _handleTodoChange(ToDoModel todo) {
     setState(() {
       todo.isDone = !todo.isDone;
     });
   }
 
-  _handleDelete(String id) {
+  void _handleDelete(String id) {
     setState(() {
       todosList.removeWhere((item) => item.id == id);
     });
     ;
   }
 
-  _addTodoItem(String todo) {
+  void _addTodoItem(String todo) {
     setState(() {
       todosList.add(ToDoModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           todoText: todo));
       todoController.clear();
     });
+  }
+
+  void _runFilter(String enteredKey) {
+    List<ToDoModel> found = [];
+    if (enteredKey.isEmpty)
+      found = todosList;
+    else {
+      found = todosList
+          .where((item) =>
+              item.todoText!.toLowerCase().contains(enteredKey.toString()))
+          .toList();
+    }
+    setState(() {
+      foundTodo = found;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    foundTodo = todosList;
   }
 
   @override
@@ -53,9 +77,10 @@ class _TodoState extends State<Todo> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: Column(
               children: [
-                SearchBar(),
+                SearchBar(_runFilter),
                 Expanded(
                   child: ListView(
+                    shrinkWrap: true,
                     children: [
                       Container(
                         margin: EdgeInsets.only(top: 50, bottom: 20, left: 3),
@@ -65,7 +90,7 @@ class _TodoState extends State<Todo> {
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
                       ),
-                      for (ToDoModel todoo in todosList)
+                      for (ToDoModel todoo in foundTodo.reversed)
                         TodoItem(
                           todo: todoo,
                           onTodoHandle: _handleTodoChange,
